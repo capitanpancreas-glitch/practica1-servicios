@@ -1,23 +1,20 @@
-const apiKey = '5f0214d'; 
-const boton = document.getElementById('btnBuscar');
-const input = document.getElementById('tituloPelicula');
-const divResultado = document.getElementById('resultado');
-
-boton.addEventListener('click', () => {
-    const titulo = input.value;
+document.getElementById('btnBuscar').addEventListener('click', function() {
+    const titulo = document.getElementById('tituloPelicula').value;
+    const resultadoDiv = document.getElementById('resultado');
+    const apiKey = '5f0214d'; 
     const url = `https://www.omdbapi.com/?t=${titulo}&apikey=${apiKey}`;
 
     fetch(url)
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            if (datos.Response === "True") {
-                divResultado.innerHTML = `
-                    <p><strong>Director:</strong> ${datos.Director}</p>
-                    <p><strong>Año:</strong> ${datos.Year}</p>
-                `;
+        .then(response => response.json())
+        .then(data => {
+            if (data.Response === "True") {
+                resultadoDiv.innerHTML = `Director: ${data.Director} <br> Año: ${data.Year}`;
             } else {
-                divResultado.innerHTML = `<p>No se ha encontrado la película.</p>`;
+                resultadoDiv.innerHTML = `Error: Película no encontrada.`;
             }
         })
-        .catch(error => console.error('Error en la petición:', error));
+        .catch(error => {
+            console.error('Error al realizar la petición:', error);
+            resultadoDiv.innerHTML = 'Hubo un error de conexión.';
+        });
 });
